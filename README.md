@@ -1,6 +1,6 @@
 # English-tutors-flask-app
 
-It's my second app on course by learning Flask. I make site of english language tutors.
+It's my second app on the Flask learning course. I make site of english language tutors.
 
 Using dependencies: Flask + WTForms, Bootstrap 4. As a database I will use json file.
 
