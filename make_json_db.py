@@ -1,5 +1,6 @@
-import data
 import json
+
+import data
 
 
 def copy_data_to_json():

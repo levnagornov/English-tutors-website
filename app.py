@@ -17,7 +17,7 @@ def render_index():
 
 @app.route('/all/')
 def render_all():
-    '''Page with a list of all teachers'''
+    '''Page with a list of all tutors'''
     return render_template('all.html')
 
 
@@ -27,34 +27,34 @@ def render_goal():
     return render_template('goal.html')
 
 
-@app.route('/profiles/<teacher_id>/')
-def render_teacher_profile():
-    '''Page with info about a certain teacher'''
+@app.route('/profiles/<tutor_id>/')
+def render_tutor_profile():
+    '''Page with info about a certain tutor'''
     return render_template('profile.html')
 
 
 @app.route('/request/')
 def render_request():
-    '''Page of selection for a teacher'''
+    '''Page of selection for a tutor'''
     return render_template('request.html')
 
 
 @app.route('/request_done/')
 def render_request_done():
     '''
-    Route for an application of seeking a teacher is successful sending
+    Route for an application of seeking a tutor is successful sending
     '''
     return render_template('request_done.html')
 
 
-@app.route('/booking/<teacher_id>/<week_day>/<time>/')
+@app.route('/booking/<tutor_id>/<week_day>/<time>/')
 def render_booking():
     '''Booking page'''
     return       
 
 @app.route('/booking_done/')
 def render_booking_done():
-    '''Route. Application for a teacher is successful sending'''
+    '''Route. Application for a tutor is successful sending'''
     return
 
 
