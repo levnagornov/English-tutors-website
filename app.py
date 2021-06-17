@@ -22,14 +22,17 @@ def render_all():
 
 
 @app.route('/goals/<goal>/')
-def render_goal():
+def render_goal(goal):
     '''Page of student's goals'''
     return render_template('goal.html')
 
-
+#DO
 @app.route('/profiles/<tutor_id>/')
-def render_tutor_profile():
+def render_tutor_profile(tutor_id):
     '''Page with info about a certain tutor'''
+
+    #tutor = get_data_from_db(tutor_id)
+    #time_shift = get_data_from_db(tutor_id[1])
     return render_template('profile.html')
 
 
@@ -48,7 +51,7 @@ def render_request_done():
 
 
 @app.route('/booking/<tutor_id>/<week_day>/<time>/')
-def render_booking():
+def render_booking(tutor_id, week_day, time):
     '''Booking page'''
     return       
 
