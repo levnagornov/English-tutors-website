@@ -1,13 +1,30 @@
 from flask import Flask, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, PasswordField
-import random
+import random, json
+
 
 app = Flask(__name__)
 class MyForm(FlaskForm):
     name = StringField('name')
     password = PasswordField('pass')
     forever = BooleanField()
+
+def get_data_from_db(option='all'):
+    '''Read data from database (json file) and returns a dict of data.
+    1. Mode by default is option='all' returns all database.
+    2. option: 'tutors' returns data only about tutors.
+    3. option: 'goals' returns data only about goals.
+    '''
+    with open('db.json', encoding='utf-8') as f:
+        db = json.load(f)
+        if option == 'all':
+            return db
+        elif option == 'tutors':
+            return db[1]
+        elif option == 'goals':
+            return db[0]     
+
 
 @app.route('/')
 def render_index():
@@ -30,8 +47,7 @@ def render_goal(goal):
 @app.route('/profiles/<tutor_id>/')
 def render_tutor_profile(tutor_id):
     '''Page with info about a certain tutor'''
-
-    #tutor = get_data_from_db(tutor_id)
+    all_tutors = get_data_from_db(option='tutor')
     #time_shift = get_data_from_db(tutor_id[1])
     return render_template('profile.html')
 
