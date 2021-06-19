@@ -5,15 +5,13 @@
   <div class="card my-4 mx-auto">
     <div class="card-body m-2 m-md-4">
       <article class="row">
-        <div class="col-5"><img src="../static/pict 1.png" class="img-fluid" alt=""></div>
+        <div class="col-5"><img src="{{ tutor_info['picture'] }}" class="img-fluid" alt=""></div>
         <div class="col-7">
 
           <section class="teacher=info">
-
-            <h1 class="h2">Morris Simmmons</h1>
-            <p><span class="badge badge-secondary mr-2">Для путешествий </span>Рейтинг: 4.8 Ставка: 1200 / час</p>
-            <p>Native English language teacherHi Everyone! My name is Richard; I am a native English speaker. I was born in South Africa, Spent 12 years living in the UK and am now living in Spain. I have a degree in food science, a TEFL certificate and a level 3 in training and education. I worked in cheese manufacturing for many years and have good knowledge of dairy production and food safety topics.</p>
-
+            <h1 class="h2">{{ tutor_info.name }}</h1>
+            <p><span class="badge badge-secondary mr-2">{{ tutor_info.study }}</span>Рейтинг: {{ tutor_info.rating }} Ставка: {{ tutor_info.price }} / час</p>
+            <p>{{ tutor_info.about }}</p>
           </section>
 
           <section class="available">
@@ -21,26 +19,95 @@
             <h4 class="mb-4 mt-5">Записаться на пробный урок</h4>
 
             <h6 class="mt-4">Понедельник</h6>
-            <a href="#" class="btn btn-outline-success mr-2">12:00 свободно</a>
-            <a href="#" class="btn btn-outline-success  mr-2">14:00 свободно</a>
+            {% if tutor_info.free.mon.values()|select|first %}
+              {% for time, is_free in tutor_info.free.mon.items() %}
+                {% if is_free %}
+                  <a href="#" class="btn btn-outline-success mr-2 my-2"
+                  >{{ time }} свободно</a>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <p>Нет свободных уроков</p> 
+            {% endif %}
+
 
             <h6 class="mt-4">Вторник</h6>
-            <a href="#" class="btn btn-outline-success  mr-2">14:00 свободно</a>
-            <a href="#" class="btn btn-outline-success  mr-2">16:00 свободно</a>
+            {% if tutor_info.free.tue.values()|select|first %}
+            {% for time, is_free in tutor_info.free.tue.items() %}
+
+                {% if is_free %}
+                <a href="#" class="btn btn-outline-success mr-2 my-2"
+                >{{ time }} свободно</a>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <p>Нет свободных уроков</p> 
+            {% endif %}
 
             <h6 class="mt-4">Среда</h6>
-            <a href="#" class="btn btn-outline-success  mr-2">14:00 свободно</a>
-            <a href="#" class="btn btn-outline-success  mr-2">16:00 свободно</a>
-            <a href="#" class="btn btn-outline-success  mr-2">18:00 свободно</a>
+            {% if tutor_info.free.wed.values()|select|first %}
+            {% for time, is_free in tutor_info.free.wed.items() %}
+
+                {% if is_free %}
+                <a href="#" class="btn btn-outline-success mr-2 my-2"
+                >{{ time }} свободно</a>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <p>Нет свободных уроков</p> 
+            {% endif %}
 
             <h6 class="mt-4">Четверг</h6>
+            {% if tutor_info.free.thu.values()|select|first %}
+            {% for time, is_free in tutor_info.free.thu.items() %}
 
-            <p>Нет свободных уроков</p>
+                {% if is_free %}
+                <a href="#" class="btn btn-outline-success mr-2 my-2"
+                >{{ time }} свободно</a>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <p>Нет свободных уроков</p> 
+            {% endif %}
 
             <h6 class="mt-4">Пятница</h6>
-            <a href="#" class="btn btn-outline-success  mr-2">14:00 свободно</a>
-            <a href="#" class="btn btn-outline-success  mr-2">16:00 свободно</a>
-            <a href="#" class="btn btn-outline-success  mr-2">18:00 свободно</a>
+            {% if tutor_info.free.fri.values()|select|first %}
+            {% for time, is_free in tutor_info.free.fri.items() %}
+
+                {% if is_free %}
+                <a href="#" class="btn btn-outline-success mr-2 my-2"
+                >{{ time }} свободно</a>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <p>Нет свободных уроков</p> 
+            {% endif %}
+
+            <h6 class="mt-4">Суббота</h6>
+            {% if tutor_info.free.sat.values()|select|first %}
+            {% for time, is_free in tutor_info.free.sat.items() %}
+
+                {% if is_free %}
+                <a href="#" class="btn btn-outline-success mr-2 my-2"
+                >{{ time }} свободно</a>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <p>Нет свободных уроков</p> 
+            {% endif %}
+
+            <h6 class="mt-4">Воскресенье</h6>
+            {% if tutor_info.free.sun.values()|select|first %}
+            {% for time, is_free in tutor_info.free.sun.items() %}
+
+                {% if is_free %}
+                <a href="#" class="btn btn-outline-success mr-2 my-2"
+                >{{ time }} свободно</a>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <p>Нет свободных уроков</p> 
+            {% endif %}
 
           </section>
 

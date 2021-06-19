@@ -1,3 +1,4 @@
+from os import PathLike
 from flask import Flask, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, PasswordField
@@ -16,6 +17,9 @@ def get_data_from_db(option='all'):
     2. option: 'tutors' returns data only about tutors.
     3. option: 'goals' returns data only about goals.
     '''
+    if option not in ('all', 'tutors', 'goals'):
+        raise AttributeError
+
     with open('db.json', encoding='utf-8') as f:
         db = json.load(f)
         if option == 'all':
@@ -44,12 +48,17 @@ def render_goal(goal):
     return render_template('goal.html')
 
 #DO
-@app.route('/profiles/<tutor_id>/')
+@app.route('/profiles/<int:tutor_id>/')
 def render_tutor_profile(tutor_id):
     '''Page with info about a certain tutor'''
-    all_tutors = get_data_from_db(option='tutor')
-    #time_shift = get_data_from_db(tutor_id[1])
-    return render_template('profile.html')
+    all_tutors = get_data_from_db(option='tutors')
+    #get dict info by tutor id, catching out of index error
+    try:
+        tutor_info = [tutor for tutor in all_tutors if tutor.get('id', 'No match data') == int(tutor_id)][0]
+    except IndexError:
+        return render_not_found(404)
+
+    return render_template('profile.html', tutor_info=tutor_info)
 
 
 @app.route('/request/')
@@ -77,8 +86,28 @@ def render_booking_done():
     return
 
 
+#errors handling
+@app.errorhandler(500)
+def render_server_error(
+    error, 
+    message='Что-то не так, но мы все починим!'
+):
+    ''' Handling 500 error '''
+
+    return render_template('error.html', message=message), 500
+
+
+@app.errorhandler(404)
+def render_not_found(
+    error, 
+    message='Ничего не нашлось! Вот неудача, отправляйтесь на главную!'    
+):
+    ''' Handling 404 error '''
+
+    return render_template('error.html', message=message), 404
+
+
 #entry point
 if __name__ == '__main__':
- 
     app.run(debug=True)
     #app.run()
