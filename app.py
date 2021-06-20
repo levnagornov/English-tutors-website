@@ -26,18 +26,24 @@ def get_data_from_db(option='all'):
     1. Mode by default is option='all' returns all database.
     2. option: 'tutors' returns data only about tutors.
     3. option: 'goals' returns data only about goals.
+    4. option: 'days_of_week' returns dict with days of the week in rus and eng
+    5. option: 'time_for_practice' returns data for request form.
     '''
-    if option not in ('all', 'tutors', 'goals'):
+    if option not in ('all', 'tutors', 'goals', 'days_of_week', 'time_for_practice'):
         raise AttributeError
 
     with open('db.json', encoding='utf-8') as f:
         db = json.load(f)
         if option == 'all':
             return db
+        elif option == 'goals':
+            return db[0]    
         elif option == 'tutors':
             return db[1]
-        elif option == 'goals':
-            return db[0]     
+        elif option == 'days_of_week':
+            return db[2]
+        elif option == 'time_for_practice':
+            return db[3]
 
 
 @app.route('/')
@@ -64,7 +70,7 @@ def render_goal(goal):
 def render_tutor_profile(tutor_id):
     '''Page with info about a certain tutor'''
     all_tutors = get_data_from_db(option='tutors')
-    
+
     #get dict info by tutor id, catching out of index error
     try:
         tutor_info = [tutor for tutor in all_tutors if tutor.get('id', 'No match data') == int(tutor_id)][0]
@@ -88,13 +94,27 @@ def render_request_done():
     return render_template('request_done.html')
 
 
-@app.route('/booking/<tutor_id>/<week_day>/<time>/', methods=['GET', 'POST'])
-def render_booking(tutor_id, week_day, time):
+@app.route('/booking/<tutor_id>/<class_day>/<time>/', methods=['GET', 'POST'])
+def render_booking(tutor_id, class_day, time):
     '''Booking page'''
+    
     # if request.method == 'POST':
     #     pass
+    all_days_of_week = get_data_from_db(option='days_of_week')
+    all_tutors = get_data_from_db(option='tutors')
+    tutor_info = [tutor for tutor in all_tutors if tutor.get('id', 'No match data') == int(tutor_id)][0]
 
-    return render_template('booking.html', tutor_id=tutor_id, week_day=week_day, time=time)   
+    print(all_days_of_week[class_day])
+    
+    return render_template(
+        'booking.html', 
+        tutor_info=tutor_info, 
+        tutor_id=tutor_id, 
+        class_day=class_day,
+        time=time, 
+        all_days_of_week=all_days_of_week
+    )   
+
 
 @app.route('/booking_done/')
 def render_booking_done():

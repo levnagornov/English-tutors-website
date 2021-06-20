@@ -11,7 +11,7 @@ def copy_data_to_json():
     '''
     with open('db.json', 'w', encoding='utf-8') as f:
             json.dump(
-                (data.goals, data.teachers), 
+                (data.goals, data.teachers, data.days_of_week, data.time_for_practice), 
                 f, 
                 ensure_ascii=False, 
                 indent=4,
@@ -21,3 +21,4 @@ def copy_data_to_json():
 
 if __name__ == '__main__':
     copy_data_to_json()
+    print('Database - db.json is successfully created')

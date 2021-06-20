@@ -1,4 +1,9 @@
-goals = {"travel": "Для путешествий", "study": "Для учебы", "work": "Для работы", "relocate": "Для переезда"}
+goals = {
+        "travel": "Для путешествий", 
+        "study": "Для учебы", 
+        "work": "Для работы", 
+        "relocate": "Для переезда"
+}
 
 teachers = [
 
@@ -387,3 +392,27 @@ teachers = [
         }
     },
 ]
+
+days_of_week = {
+        'mon' : ('mon', 'monday', 'Понедельник'),
+        'tue' : ('tue', 'tuesday', 'Вторник'),
+        'wed' : ('wed', 'wednesday', 'Среда'),
+        'thu' : ('thu', 'thursday', 'Четверг'),
+        'fri' : ('fri', 'friday', 'Пятница'),
+        'sat' : ('sat', 'saturday', 'Суббота'),
+        'sun' : ('sun', 'sunday', 'Воскресенье'),
+        'monday' : ('mon', 'monday', 'Понедельник'),
+        'tuesday' : ('tue', 'tuesday', 'Вторник'),
+        'wednesday' : ('wed', 'wednesday', 'Среда'),
+        'thursday' : ('thu', 'thursday', 'Четверг'),
+        'friday' : ('fri', 'friday', 'Пятница'),
+        'saturday' : ('sat', 'saturday', 'Суббота'),
+        'sunday' : ('sun', 'sunday', 'Воскресенье')
+}
+
+time_for_practice = {
+    'limit1_2': '1-2 часа в неделю',
+    'limit3_5': '3-5 часов в неделю',
+    'limit5_7': '5-7 часов в неделю',
+    'limit7_10': '7-10 часов в неделю'
+}
