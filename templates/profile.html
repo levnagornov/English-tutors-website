@@ -18,96 +18,27 @@
 
             <h4 class="mb-4 mt-5">Записаться на пробный урок</h4>
 
-            <h6 class="mt-4">Понедельник</h6>
-            {% if tutor_info.free.mon.values()|select|first %}
-              {% for time, is_free in tutor_info.free.mon.items() %}
-                {% if is_free %}
-                  <a href="#" class="btn btn-outline-success mr-2 my-2"
-                  >{{ time }} свободно</a>
-                {% endif %}
-              {% endfor %}
-            {% else %}
-              <p>Нет свободных уроков</p> 
-            {% endif %}
-
-
-            <h6 class="mt-4">Вторник</h6>
-            {% if tutor_info.free.tue.values()|select|first %}
-            {% for time, is_free in tutor_info.free.tue.items() %}
-
-                {% if is_free %}
-                <a href="#" class="btn btn-outline-success mr-2 my-2"
-                >{{ time }} свободно</a>
-                {% endif %}
-              {% endfor %}
-            {% else %}
-              <p>Нет свободных уроков</p> 
-            {% endif %}
-
-            <h6 class="mt-4">Среда</h6>
-            {% if tutor_info.free.wed.values()|select|first %}
-            {% for time, is_free in tutor_info.free.wed.items() %}
-
-                {% if is_free %}
-                <a href="#" class="btn btn-outline-success mr-2 my-2"
-                >{{ time }} свободно</a>
-                {% endif %}
-              {% endfor %}
-            {% else %}
-              <p>Нет свободных уроков</p> 
-            {% endif %}
-
-            <h6 class="mt-4">Четверг</h6>
-            {% if tutor_info.free.thu.values()|select|first %}
-            {% for time, is_free in tutor_info.free.thu.items() %}
-
-                {% if is_free %}
-                <a href="#" class="btn btn-outline-success mr-2 my-2"
-                >{{ time }} свободно</a>
-                {% endif %}
-              {% endfor %}
-            {% else %}
-              <p>Нет свободных уроков</p> 
-            {% endif %}
-
-            <h6 class="mt-4">Пятница</h6>
-            {% if tutor_info.free.fri.values()|select|first %}
-            {% for time, is_free in tutor_info.free.fri.items() %}
-
-                {% if is_free %}
-                <a href="#" class="btn btn-outline-success mr-2 my-2"
-                >{{ time }} свободно</a>
-                {% endif %}
-              {% endfor %}
-            {% else %}
-              <p>Нет свободных уроков</p> 
-            {% endif %}
-
-            <h6 class="mt-4">Суббота</h6>
-            {% if tutor_info.free.sat.values()|select|first %}
-            {% for time, is_free in tutor_info.free.sat.items() %}
-
-                {% if is_free %}
-                <a href="#" class="btn btn-outline-success mr-2 my-2"
-                >{{ time }} свободно</a>
-                {% endif %}
-              {% endfor %}
-            {% else %}
-              <p>Нет свободных уроков</p> 
-            {% endif %}
-
-            <h6 class="mt-4">Воскресенье</h6>
-            {% if tutor_info.free.sun.values()|select|first %}
-            {% for time, is_free in tutor_info.free.sun.items() %}
-
-                {% if is_free %}
-                <a href="#" class="btn btn-outline-success mr-2 my-2"
-                >{{ time }} свободно</a>
-                {% endif %}
-              {% endfor %}
-            {% else %}
-              <p>Нет свободных уроков</p> 
-            {% endif %}
+            {% set weekdays = (
+              ('Понедельник', 'mon', 'monday'),
+              ('Вторник', 'tue', 'tuesday'),
+              ('Среда', 'wed', 'wednesday'),
+              ('Четверг', 'thu', 'thursday'),
+              ('Пятница', 'fri', 'friday'),
+              ('Суббота', 'sat', 'saturday'),
+              ('Воскресенье', 'sun', 'sunday')) %}
+            {% for day_rus, day_eng_short, day_eng_long in weekdays %}
+              <h6 class="mt-4">{{ day_rus }}</h6>
+              {% if tutor_info.free[day_eng_short].values()|select|first %}
+                {% for time, is_free in tutor_info.free[day_eng_short].items() %}
+                  {% if is_free %}
+                    <a href="{{ url_for('render_booking', tutor_id=tutor_info.id, week_day=day_eng_long, time=time) }}" class="btn btn-outline-success mr-2 my-2"
+                    >{{ time }} свободно</a>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                <p>Нет свободных уроков</p> 
+              {% endif %}
+            {% endfor %}
 
           </section>
 
