@@ -8,7 +8,6 @@
         <div class="col-5"><img src="{{ tutor_info['picture'] }}" class="img-fluid" alt=""></div>
         <div class="col-7">
 
-          
           <section class="teacher=info">
             <h1 class="h2">{{ tutor_info.name }}</h1>
             <p><span class="badge badge-secondary mr-2">{{ tutor_info.study }}</span>Рейтинг: {{ tutor_info.rating }} Ставка: {{ tutor_info.price }} / час</p>
@@ -16,9 +15,7 @@
           </section>
 
           <section class="available">
-
             <h4 class="mb-4 mt-5">Записаться на пробный урок</h4>
-
             {% set weekdays = (
               ('Понедельник', 'mon', 'monday'),
               ('Вторник', 'tue', 'tuesday'),
@@ -32,7 +29,7 @@
               {% if tutor_info.free[day_eng_short].values()|select|first %}
                 {% for time, is_free in tutor_info.free[day_eng_short].items() %}
                   {% if is_free %}
-                    <a href="{{ url_for('render_booking', tutor_id=tutor_info.id, week_day=day_eng_long, time=time) }}" class="btn btn-outline-success mr-2 my-2"
+                    <a href="{{ url_for('render_booking', tutor_id=tutor_info.id, class_day=day_eng_long, time=time) }}" class="btn btn-outline-success mr-2 my-2"
                     >{{ time }} свободно</a>
                   {% endif %}
                 {% endfor %}
@@ -40,7 +37,6 @@
                 <p>Нет свободных уроков</p> 
               {% endif %}
             {% endfor %}
-
           </section>
 
         </div>

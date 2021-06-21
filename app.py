@@ -1,56 +1,19 @@
-from datetime import date
+import random, os
 from flask import Flask, render_template, request
-from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, PasswordField, RadioField
-import random, json
-
+from forms import BookingForm, RequestForm
+from func import get_data_from_db
+from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
-
-class RequestForm(FlaskForm):
-    ''' Request form for a tutor search '''
-    goal = RadioField(
-        'Какая цель занятий?', 
-        choices = [("key1","Значение 1"),("key2","Значение 2")])
-
-    time_for_practice = RadioField(
-        'certification', 
-        choices = [("key1","Значение 1"),("key2","Значение 2")])
-
-    name = StringField('name')
-    phone = PasswordField('pass')
-
-
-def get_data_from_db(option='all'):
-    '''Read data from database (json file) and returns a dict of data.
-    1. Mode by default is option='all' returns all database.
-    2. option: 'tutors' returns data only about tutors.
-    3. option: 'goals' returns data only about goals.
-    4. option: 'days_of_week' returns dict with days of the week in rus and eng
-    5. option: 'time_for_practice' returns data for request form.
-    '''
-    if option not in ('all', 'tutors', 'goals', 'days_of_week', 'time_for_practice'):
-        raise AttributeError
-
-    with open('db.json', encoding='utf-8') as f:
-        db = json.load(f)
-        if option == 'all':
-            return db
-        elif option == 'goals':
-            return db[0]    
-        elif option == 'tutors':
-            return db[1]
-        elif option == 'days_of_week':
-            return db[2]
-        elif option == 'time_for_practice':
-            return db[3]
-
+csrf = CSRFProtect(app)
+SECRET_KEY = os.urandom(43)
+app.config['SECRET_KEY'] = SECRET_KEY
 
 @app.route('/')
 def render_index():
     '''Main page'''
     all_tutors = get_data_from_db(option='tutors')
-    random_tutors = random.sample(list(all_tutors), k=3)
+    random_tutors = random.sample(list(all_tutors), k=6)
     return render_template('index.html', random_tutors=random_tutors)
 
 
@@ -70,14 +33,14 @@ def render_goal(goal):
 def render_tutor_profile(tutor_id):
     '''Page with info about a certain tutor'''
     all_tutors = get_data_from_db(option='tutors')
-
+    days_of_week = get_data_from_db(option='days_of_week')
     #get dict info by tutor id, catching out of index error
     try:
         tutor_info = [tutor for tutor in all_tutors if tutor.get('id', 'No match data') == int(tutor_id)][0]
     except IndexError:
         return render_not_found(404)
 
-    return render_template('profile.html', tutor_info=tutor_info)
+    return render_template('profile.html', tutor_info=tutor_info, days_of_week=days_of_week)
 
 
 @app.route('/request/')
@@ -97,52 +60,54 @@ def render_request_done():
 @app.route('/booking/<tutor_id>/<class_day>/<time>/', methods=['GET', 'POST'])
 def render_booking(tutor_id, class_day, time):
     '''Booking page'''
-    
-    # if request.method == 'POST':
-    #     pass
     all_days_of_week = get_data_from_db(option='days_of_week')
     all_tutors = get_data_from_db(option='tutors')
     tutor_info = [tutor for tutor in all_tutors if tutor.get('id', 'No match data') == int(tutor_id)][0]
+    form = BookingForm()
+    if request.method == 'POST':
+        client_name, client_phone  = form.name.data, form.phone.data
+        return render_template(
+            'booking_done.html', 
+            all_days_of_week=all_days_of_week,
+            form=form, 
+            class_day=class_day, 
+            time=time, 
+            client_name=client_name, 
+            client_phone=client_phone)
 
-    print(all_days_of_week[class_day])
-    
     return render_template(
         'booking.html', 
         tutor_info=tutor_info, 
         tutor_id=tutor_id, 
         class_day=class_day,
         time=time, 
-        all_days_of_week=all_days_of_week
-    )   
-
-
-@app.route('/booking_done/')
-def render_booking_done():
-    '''Route. Application for a tutor is successful sending'''
-    # form = date, time, phone
-    return render_template('booking_done.html')
+        all_days_of_week=all_days_of_week,
+        form=form)   
 
 
 #errors handling
 @app.errorhandler(500)
 def render_server_error(
     error, 
-    message='Что-то не так, но мы все починим!'
-):
+    message='Что-то не так, но мы все починим!'):
     ''' Handling 500 error '''
-
     return render_template('error.html', message=message), 500
 
 
 @app.errorhandler(404)
 def render_not_found(
     error, 
-    message='Ничего не нашлось! Вот неудача, отправляйтесь на главную!'    
-):
+    message='Ничего не нашлось! Вот неудача, отправляйтесь на главную!'):
     ''' Handling 404 error '''
-
     return render_template('error.html', message=message), 404
 
+
+@app.errorhandler(400)
+def render_not_found(
+    error, 
+    message='Бронирование происходит со страницы преподавателя!'):
+    ''' Handling 404 error '''
+    return render_template('error.html', message=message), 400
 
 #entry point
 if __name__ == '__main__':
