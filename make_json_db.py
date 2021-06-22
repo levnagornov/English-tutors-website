@@ -1,9 +1,10 @@
 import json
+from os import error
 
-import data
+import data, func
 
 
-def copy_data_to_json():
+def make_json_db():
     ''' 
     Due to the course requirements 
     1. I must use json file as a database
@@ -16,9 +17,13 @@ def copy_data_to_json():
                 ensure_ascii=False, 
                 indent=4,
                 separators=(',', ': ')
-                )
+            )   
                 
 
 if __name__ == '__main__':
-    copy_data_to_json()
+    make_json_db()
+    print()
     print('Database - db.json is successfully created')
+    print()
+    for tutor_id in [8, 9, 10, 11]: 
+        func.add_goal_to_tutor('programming', tutor_id)

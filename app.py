@@ -13,20 +13,28 @@ app.config['SECRET_KEY'] = SECRET_KEY
 def render_index():
     '''Main page'''
     all_tutors = get_data_from_db(option='tutors')
+    all_goals = get_data_from_db(option='goals')
     random_tutors = random.sample(list(all_tutors), k=6)
-    return render_template('index.html', random_tutors=random_tutors)
+    print(all_goals)
+    return render_template('index.html', random_tutors=random_tutors, all_goals=all_goals)
 
 
 @app.route('/all/')
 def render_all():
     '''Page with a list of all tutors'''
-    return render_template('all.html')
+    all_tutors = get_data_from_db(option='tutors')
+    return render_template('all.html', all_tutors=all_tutors)
 
 
 @app.route('/goals/<goal>/')
 def render_goal(goal):
     '''Page of student's goals'''
-    return render_template('goal.html')
+    all_tutors = get_data_from_db(option='tutors')
+    all_goals = get_data_from_db(option='goals')
+    tutors_by_goal = [
+        tutor for tutor in all_tutors if goal in tutor['goals']
+        ]   
+    return render_template('goal.html', goal=goal, tutors_by_goal=tutors_by_goal, all_goals=all_goals)
 
 
 @app.route('/profiles/<int:tutor_id>/')

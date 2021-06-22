@@ -23,3 +23,22 @@ def get_data_from_db(option='all'):
             return db[2]
         elif option == 'time_for_practice':
             return db[3]
+
+
+def add_goal_to_tutor(goal, tutor_id):
+    '''Appends a goal to a tutor in database.
+    Requies goal->str and tutor_id->int
+    '''
+    all_tutors = get_data_from_db(option='tutors')
+        
+    with open('db.json', encoding='utf-8') as f:
+        db = json.load(f)
+        all_tutors = db[1]
+        for tutor_info in all_tutors:
+            if tutor_info['id'] == tutor_id:
+                if goal not in tutor_info['goals']:
+                    tutor_info['goals'].append(goal)
+                break
+    with open('db.json', 'w', encoding='utf-8') as w:
+        json.dump(db, w, ensure_ascii=False, indent=4, separators=(',', ': '))
+        print(f'Goal - {goal} has been added to {tutor_info["name"]} with id {tutor_id}')
