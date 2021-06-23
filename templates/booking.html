@@ -6,7 +6,7 @@
     <div class="col-10 col-md-6 offset-1 offset-md-3 mb-3">
 
       <form action="{{ url_for('render_booking', tutor_id=tutor_info.id, class_day=class_day, time=time) }}" method="POST" class="card mb-3">
-        {{ form.csrf_token }}
+          {{ form.csrf_token }}
         <div class="card-body text-center pt-5">
           <img src="{{ tutor_info.picture }}" class="mb-3" width="95" alt="">
           <h2 class="h5 card-title mt-2 mb-2">{{ tutor_info.name }}</h2>

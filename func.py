@@ -42,3 +42,20 @@ def add_goal_to_tutor(goal, tutor_id):
     with open('db.json', 'w', encoding='utf-8') as w:
         json.dump(db, w, ensure_ascii=False, indent=4, separators=(',', ': '))
         print(f'Goal - {goal} has been added to {tutor_info["name"]} with id {tutor_id}')
+
+
+
+def is_request_in_db(request):
+    '''Returns True if request already in database, otherwise returns False'''
+    with open('users_requests.json', encoding='utf-8') as f:
+        db = json.load(f)
+        if request in db:
+            return False
+        return
+
+def save_request(request):
+    '''Saves user request into json file'''
+    with open('users_requests.json', 'a', encoding='utf-8') as f:
+        json.dump(request, f, ensure_ascii=False, indent=4, separators=(',', ': '))
+        print(f'Request - {request} has been added to users_requests.json')
+    pass

@@ -15,7 +15,6 @@ def render_index():
     all_tutors = get_data_from_db(option='tutors')
     all_goals = get_data_from_db(option='goals')
     random_tutors = random.sample(list(all_tutors), k=6)
-    print(all_goals)
     return render_template('index.html', random_tutors=random_tutors, all_goals=all_goals)
 
 
@@ -51,18 +50,23 @@ def render_tutor_profile(tutor_id):
     return render_template('profile.html', tutor_info=tutor_info, days_of_week=days_of_week)
 
 
-@app.route('/request/')
+@app.route('/request/', methods=['GET', 'POST'])
 def render_request():
     '''Page of selection for a tutor'''
-    return render_template('request.html')
-
-
-@app.route('/request_done/')
-def render_request_done():
-    '''
-    Route for an application of seeking a tutor is successful sending
-    '''
-    return render_template('request_done.html')
+    form = RequestForm()
+    if request.method == 'POST':
+        goal = form.goal.data
+        time_for_practice = form.time_for_practice.data
+        name = form.name.data
+        phone = form.phone.data
+        return render_template(
+            'request_done.html',
+            goal=goal,
+            time_for_practice=time_for_practice,
+            name=name,
+            phone=phone
+        )
+    return render_template('request.html', form=form)
 
 
 @app.route('/booking/<tutor_id>/<class_day>/<time>/', methods=['GET', 'POST'])

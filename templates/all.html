@@ -35,7 +35,7 @@
             <div class="row">
               <div class="col-3"><img src="{{ tutor.picture }}" class="img-fluid" alt=""></div>
               <div class="col-9">
-                <p class="float-right">Рейтинг: {{ tutor.ratig }} Ставка: {{ tutor.price }} / час</p>
+                <p class="float-right">Рейтинг: 😍{{ tutor.rating }} Ставка: {{ tutor.price }} / час</p>
                 <h2 class="h4">{{ tutor.name }}</h2>
                 <p>{{ tutor.about }}</p>
                 <a href="{{ url_for('render_tutor_profile', tutor_id=tutor.id) }}" class="btn btn-outline-primary btn-sm mr-3 mb-2">Показать информацию и расписание</a>
