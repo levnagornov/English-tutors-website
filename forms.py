@@ -15,7 +15,7 @@ class RequestForm(FlaskForm):
     '''Request form for a tutor search'''
     goal = RadioField(
         'Какая цель занятий?', 
-        choices = [(key, value) for key, value in get_data_from_db(option='goals').items()])
+        choices = [(key, ' '.join(value)) for key, value in get_data_from_db(option='goals').items()])
 
     time_for_practice = RadioField(
         'Сколько времени есть?', 

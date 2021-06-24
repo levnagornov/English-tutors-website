@@ -17,23 +17,15 @@
         <div class="row">
           <div class="col">
             <p>Какая цель занятий?</p>
-
-
-            <div class="form-check ">
-              <input type="radio" class="form-check-input" name="goal" value="travel" id="goal1" checked>
-              <label class="form-check-label" for="goal1">
-                Для путешествий
-              </label> 
-            </div>
-
-            <div class="form-check ">
-              {{ form.goal(class_="form-check-input") }}
-              {{ form.goal.label(class_="form-check-label") }}
-            </div>
-
+            
+              {% for goal in form.goal %}
+              <div class="form-check ">
+                {{ goal(class_="form-check-input") }}
+                {{ goal.label(class_="form-check-label") }}
+              </div>
+              {% endfor %}
 
           </div>
-
 
           <div class="col">
             <p>Сколько времени есть?</p>
