@@ -1,6 +1,6 @@
 import random, os
 from flask import Flask, render_template, request, redirect, url_for
-from forms import BookingForm, RequestForm
+from forms import BookingForm, RequestForm, SortTutorsForm
 from func import get_data_from_db
 from flask_wtf.csrf import CSRFProtect
 
@@ -25,15 +25,33 @@ def render_index():
     return render_template('index.html', random_tutors=random_tutors, all_goals=all_goals)
 
 
-@app.route('/all/')
+@app.route('/all/', methods=['GET', 'POST'])
 def render_all():
     '''Page with a list of all tutors and sorting form. 
     Also contains request for a tutor search form.
+    By default shows list of tutors with random order.
     '''
     #getting data from DB for a template
     all_tutors = get_data_from_db(option='tutors')
 
-    return render_template('all.html', all_tutors=all_tutors)
+    #by default we show all tutors in random order
+    sorted_tutors = random.sample(all_tutors, len(all_tutors))
+
+    form = SortTutorsForm()
+
+    #getting sort-mode and showing page with sorted tutors by certain sort-mode
+    if request.method == 'POST':
+        sort_by = form.sort_by.data
+        if sort_by == "high_rating_first":
+            sorted_tutors.sort(key=lambda x: x['rating'], reverse=True)
+        elif sort_by == "high_price_first":
+            sorted_tutors.sort(key=lambda x: x['price'], reverse=True)
+        elif sort_by == "low_price_first":
+            sorted_tutors.sort(key=lambda x: x['price'])
+        return render_template(
+            'all.html', all_tutors=sorted_tutors, form=form)    
+
+    return render_template('all.html', all_tutors=sorted_tutors, form=form)
 
 
 @app.route('/goals/<goal>/')
@@ -157,9 +175,19 @@ def render_server_error(error, msg='Что-то не так, но мы все п
 def render_not_found(
     error, 
     msg='Ничего не нашлось! Вот неудача, отправляйтесь на главную!'):
-    ''' Handling 404 error '''
+    '''Handling 404 error'''
 
     return render_template('error.html', msg=msg), 404
+
+
+@app.errorhandler(400)
+def render_bad_request(
+    error, 
+    msg='Ничего не нашлось! Вот неудача, отправляйтесь на главную!'):
+    '''Handling 400 error'''
+
+    return render_template('error.html', msg=msg), 400
+
 
 #entry point
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, RadioField, SubmitField, HiddenField
+from wtforms import StringField, RadioField, SubmitField, HiddenField, SelectField
 from wtforms.validators import InputRequired
 
 from func import get_data_from_db
@@ -15,7 +15,6 @@ class BookingForm(FlaskForm):
     submit = SubmitField('Записаться на пробный урок')
 
 
-
 class RequestForm(FlaskForm):
     '''Request form for a tutor search'''
     goal = RadioField(
@@ -29,3 +28,15 @@ class RequestForm(FlaskForm):
     name = StringField('Вас зовут', [InputRequired('Пожалуйста, введите ваше имя')])
     phone = StringField('Ваш телефон', [InputRequired('Пожалуйста, введите ваш номер телефона')])
     submit = SubmitField('Найдите мне преподавателя!')
+
+
+class SortTutorsForm(FlaskForm):
+    sort_by = SelectField(
+        'Сортировка преподавателей',
+        choices=[
+            ('random', 'В случайном порядке'), 
+            ('high_rating_first', 'Сначала лучшие по рейтингу'),
+            ('high_price_first', 'Сначала дорогие'),
+            ('low_price_first', 'Сначала недорогие')],
+        default='random')
+    submit = SubmitField('Сортировать')

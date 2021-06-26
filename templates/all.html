@@ -2,7 +2,7 @@
 
 {% block content %}
 <main class="container mt-3">
-  <h1 class="h1 text-center w-50 mx-auto mt-1 py-5 mb-4"><strong>Все преподаватели</strong></h1>
+  <h1 class="h1 text-center w-50 mx-auto mt-1 py-5 mb-4"><strong>Все преподаватели 🤙</strong></h1>
 
 
 
@@ -15,17 +15,16 @@
 
           <p class="lead float-left d-inline-block mt-2 mb-0"><strong>{{ all_tutors|length }} преподавателей в базе</strong></p>
 
-          <form class="float-right d-inline-block">
+          <form class="float-right d-inline-block" method="POST" action="/all/">
+            {{ form.csrf_token() }}
             <div class="form-inline">
-              <select class="custom-select my-1 mr-2" id="inlineFormCustomSelectPref">
-                <option selected>В случайном порядке</option>
-                <option value="3">Сначала лучшие по рейтингу</option>
-                <option value="1">Сначала дорогие</option>
-                <option value="2">Сначала недорогие</option>
-              </select>
-              <button type="submit" class="btn btn-primary my-1">Сортировать</button>
+
+              {{ form.sort_by(class_="custom-select my-1 mr-2", id_="inlineFormCustomSelectPref") }}
+
+              {{ form.submit(class_="btn btn-primary my-1") }}
             </div>
           </form>
+
         </div>
       </div>
 
