@@ -5,8 +5,10 @@
   <div class="row mt-5">
     <div class="col-10 col-md-6 offset-1 offset-md-3 mb-3">
 
-      <form action="{{ url_for('render_booking', tutor_id=tutor_info.id, class_day=class_day, time=time) }}" method="POST" class="card mb-3">
+      <form action="{{ url_for('render_booking_done') }}" method="POST" class="card mb-3">
+
           {{ form.csrf_token }}
+
         <div class="card-body text-center pt-5">
           <img src="{{ tutor_info.picture }}" class="mb-3" width="95" alt="">
           <h2 class="h5 card-title mt-2 mb-2">{{ tutor_info.name }}</h2>
@@ -16,6 +18,10 @@
         <hr />  
         <div class="card-body mx-3">
           <div class="row">
+          {{ form.tutor_id(class_="form-control") }}
+          {{ form.class_day(class_="form-control") }}
+          {{ form.time(class_="form-control") }}
+          </div>
           {{ form.name.label(class_="mb-1 mt-2") }}
           {{ form.name(class_="form-control") }}
 
@@ -23,7 +29,7 @@
           {{ form.phone(class_="form-control") }}
 
           {{ form.submit(class_="btn btn-primary btn-block mt-4") }}
-          </div>
+
         </div>
       </form>
 

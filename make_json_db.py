@@ -1,6 +1,4 @@
 import json
-from os import error
-
 import data, func
 
 
@@ -16,8 +14,7 @@ def make_json_db():
                 f, 
                 ensure_ascii=False, 
                 indent=4,
-                separators=(',', ': ')
-            )   
+                separators=(',', ': '))   
                 
 
 if __name__ == '__main__':

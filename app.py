@@ -1,5 +1,5 @@
 import random, os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from forms import BookingForm, RequestForm
 from func import get_data_from_db
 from flask_wtf.csrf import CSRFProtect
@@ -59,34 +59,27 @@ def render_request():
         time_for_practice = form.time_for_practice.data
         name = form.name.data
         phone = form.phone.data
-        return render_template(
-            'request_done.html',
-            goal=goal,
-            time_for_practice=time_for_practice,
-            name=name,
-            phone=phone
-        )
+        if form.validate_on_submit():
+            return render_template(
+                'request_done.html',
+                goal=goal,
+                time_for_practice=time_for_practice,
+                name=name,
+                phone=phone
+            )
     return render_template('request.html', form=form)
 
 
-@app.route('/booking/<tutor_id>/<class_day>/<time>/', methods=['GET', 'POST'])
+@app.route('/booking/<tutor_id>/<class_day>/<time>/')
 def render_booking(tutor_id, class_day, time):
     '''Booking page'''
     all_days_of_week = get_data_from_db(option='days_of_week')
     all_tutors = get_data_from_db(option='tutors')
     tutor_info = [tutor for tutor in all_tutors if tutor.get('id', 'No match data') == int(tutor_id)][0]
-    form = BookingForm()
-    if request.method == 'POST':
-        client_name, client_phone  = form.name.data, form.phone.data
-        return render_template(
-            'booking_done.html', 
-            all_days_of_week=all_days_of_week,
-            form=form, 
-            class_day=class_day, 
-            time=time, 
-            client_name=client_name, 
-            client_phone=client_phone)
-
+    form = BookingForm()    
+    form.class_day.data = class_day
+    form.time.data = time
+    form.tutor_id.data = tutor_id
     return render_template(
         'booking.html', 
         tutor_info=tutor_info, 
@@ -95,6 +88,26 @@ def render_booking(tutor_id, class_day, time):
         time=time, 
         all_days_of_week=all_days_of_week,
         form=form)   
+
+
+@app.route('/booking_done/', methods=['GET', 'POST'])
+def render_booking_done():
+    ''' This page show only when /booking/ is successfully done '''
+    form = BookingForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        client_name, client_phone = form.name.data, form.phone.data
+        class_day, time = form.class_day.data, form.time.data
+        tutor_id = form.tutor_id.data
+        all_days_of_week = get_data_from_db(option='days_of_week')
+        return render_template(
+            'booking_done.html', 
+            all_days_of_week=all_days_of_week,
+            class_day=class_day, 
+            time=time, 
+            client_name=client_name, 
+            client_phone=client_phone)
+
+    return render_not_found(404)
 
 
 #errors handling

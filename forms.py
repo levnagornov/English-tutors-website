@@ -1,12 +1,15 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, PasswordField, RadioField, IntegerField, SubmitField
-from wtforms.validators import InputRequired, Email
+from wtforms import StringField, RadioField, SubmitField, HiddenField
+from wtforms.validators import InputRequired
 
 from func import get_data_from_db
 
 
 class BookingForm(FlaskForm):
     '''Booking form for a class with a tutor'''
+    tutor_id = HiddenField()
+    class_day = HiddenField()
+    time = HiddenField()
     name = StringField('Вас зовут', [InputRequired('Пожалуйста, введите ваше имя')])
     phone = StringField('Ваш телефон', [InputRequired('Пожалуйста, введите ваш номер телефона')])
     submit = SubmitField('Записаться на пробный урок')
