@@ -13,8 +13,8 @@
           </div>
           <hr />
           <div class="card-body mx-5">
-            <p><b>Цель занятий:</b> {{goal}}</p>
-            <p><b>Времени есть:</b> {{time_for_practice}}</p>
+            <p><b>Цель занятий:</b> {{ all_goals[goal]| join(" ") }}</p>
+            <p><b>Времени есть:</b> {{ all_time_for_practice[time_for_practice] }}</p>
             <p><b>Имя:</b> {{name}}</p>
             <p><b>Телефон:</b> {{phone}}</p>
           </div>

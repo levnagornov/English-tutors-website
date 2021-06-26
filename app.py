@@ -83,25 +83,37 @@ def render_tutor_profile(tutor_id):
     return render_template('profile.html', tutor_info=tutor_info, days_of_week=days_of_week)
 
 
-@app.route('/request/', methods=['GET', 'POST'])
+@app.route('/request/')
 def render_request():
-    '''Page of selection for a tutor.'''
+    '''Page with form for personal seeking a tutor.'''
     form = RequestForm()
-    if request.method == 'POST':
+    return render_template('request.html', form=form)
+
+###
+@app.route('/request_done/', methods=['GET', 'POST'])
+def render_request_done():
+    '''This page show only when /request/ is successfully done.'''
+
+    form = RequestForm()
+    if request.method == 'POST' and form.validate_on_submit():
         goal = form.goal.data
         time_for_practice = form.time_for_practice.data
         name = form.name.data
         phone = form.phone.data
-        if form.validate_on_submit():
-            return render_template(
-                'request_done.html',
-                goal=goal,
-                time_for_practice=time_for_practice,
-                name=name,
-                phone=phone
-            )
-    return render_template('request.html', form=form)
+        all_goals = get_data_from_db(option='goals')
+        all_time_for_practice = get_data_from_db(option='time_for_practice')
+        return render_template(
+            'request_done.html',
+            all_goals=all_goals,
+            all_time_for_practice=all_time_for_practice,
+            goal=goal,
+            time_for_practice=time_for_practice,
+            name=name,
+            phone=phone)
 
+    #Restrict access if /request/ was ignored
+    return render_not_found(404)
+###
 
 @app.route('/booking/<tutor_id>/<class_day>/<time>/')
 def render_booking(tutor_id, class_day, time):

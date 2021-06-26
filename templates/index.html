@@ -7,7 +7,6 @@
   <div class="text-center mb-5">
     <div class="btn-group mx-auto mb-0" role="group" aria-label="Basic example">
 
-      <!-- #TODO: Replace it with a cycle -->
       {% for goal_eng, goal_disc in all_goals.items() %}
         {% set goal_rus, goal_pic = goal_disc %}
         <a href="{{ url_for('render_goal', goal=goal_eng) }}" class="btn btn-outline-secondary">{{ goal_pic }} {{ goal_rus }}</a>
