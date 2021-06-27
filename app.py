@@ -131,7 +131,16 @@ def render_booking(tutor_id, class_day, time):
     all_tutors = get_data_from_db(option='tutors')
 
     #getting data about certain tutor among all tutors for a temlate
-    tutor_info = [tutor for tutor in all_tutors if tutor.get('id', 'No match data') == int(tutor_id)][0]
+    try:
+        tutor_info = [tutor for tutor in all_tutors if tutor.get('id', 'No match data') == int(tutor_id)][0]
+    except IndexError:
+        return render_not_found(404)
+
+
+    #TODO: add this to TRY block above. Check class_day and time by tutor_id
+    #handling error in day of week spelling
+    # if class_day not in []:
+    #     return render_not_found(404)
 
     #assign hidden fields of form with passed from URL data
     form = BookingForm()    

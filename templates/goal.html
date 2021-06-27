@@ -7,7 +7,7 @@
     <div class="row">
     <div class="col-12 col-lg-10 offset-lg-1 m-auto">
 
-      {% for tutor_info in tutors_by_goal %}
+      {% for tutor_info in tutors_by_goal|sort(attribute='rating', reverse = True)  %}
       <div class="card mb-4">
         <div class="card-body">
           <div class="row">
