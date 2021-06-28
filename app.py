@@ -1,7 +1,7 @@
 import random, os
 from flask import Flask, render_template, request, redirect, url_for
 from forms import BookingForm, RequestForm, SortTutorsForm
-from func import get_data_from_db
+from func import get_data_from_db, save_request
 from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
@@ -15,7 +15,7 @@ def render_index():
     Contains 6 random tutors, all possible education goals, request for a tutor search form.
     '''
 
-    #getting data from DB for a template
+    #getting data from DB for HTML template
     all_tutors = get_data_from_db(option='tutors')
     all_goals = get_data_from_db(option='goals')
 
@@ -31,7 +31,7 @@ def render_all():
     Also contains request for a tutor search form.
     By default shows list of tutors with random order.
     '''
-    #getting data from DB for a template
+    #getting data from DB for HTML template
     all_tutors = get_data_from_db(option='tutors')
 
     #by default we show all tutors in random order
@@ -58,7 +58,7 @@ def render_all():
 def render_goal(goal):
     '''Page with a list of tutors by certain education goal.'''
 
-    #getting data from DB for a template
+    #getting data from DB for HTML template
     all_tutors = get_data_from_db(option='tutors')
     all_goals = get_data_from_db(option='goals')
     tutors_by_goal = [tutor for tutor in all_tutors if goal in tutor['goals']]
@@ -70,7 +70,7 @@ def render_goal(goal):
 def render_tutor_profile(tutor_id):
     '''Page with info about a certain tutor.'''
 
-    #getting data from DB for a template
+    #getting data from DB for HTML template
     all_tutors = get_data_from_db(option='tutors')
     days_of_week = get_data_from_db(option='days_of_week')
 
@@ -89,31 +89,42 @@ def render_request():
     form = RequestForm()
     return render_template('request.html', form=form)
 
-###
+
 @app.route('/request_done/', methods=['GET', 'POST'])
 def render_request_done():
     '''This page show only when /request/ is successfully done.'''
 
     form = RequestForm()
     if request.method == 'POST' and form.validate_on_submit():
+        #saving users requests in a json file
         goal = form.goal.data
         time_for_practice = form.time_for_practice.data
-        name = form.name.data
-        phone = form.phone.data
+        client_name = form.name.data
+        client_phone = form.phone.data
+        req = {
+            'client_name' : client_name,
+            'client_phone' : client_phone,
+            'goal' : goal,
+            'time_for_practice' : time_for_practice
+         }
+        save_request(req, file_name='request.json')
+
+        #getting data from DB for HTML template
         all_goals = get_data_from_db(option='goals')
         all_time_for_practice = get_data_from_db(option='time_for_practice')
+
         return render_template(
             'request_done.html',
             all_goals=all_goals,
             all_time_for_practice=all_time_for_practice,
             goal=goal,
             time_for_practice=time_for_practice,
-            name=name,
-            phone=phone)
+            client_name=client_name,
+            client_phone=client_phone)
 
     #Restrict access if /request/ was ignored
     return render_not_found(404)
-###
+
 
 @app.route('/booking/<tutor_id>/<class_day>/<time>/')
 def render_booking(tutor_id, class_day, time):
@@ -126,7 +137,7 @@ def render_booking(tutor_id, class_day, time):
 
     Additional info from db - all_days_of_week and all_tutors.
     '''
-    #getting data from DB for a template
+    #getting data from DB for HTML template
     all_days_of_week = get_data_from_db(option='days_of_week')
     all_tutors = get_data_from_db(option='tutors')
 
@@ -164,13 +175,26 @@ def render_booking_done():
 
     form = BookingForm()
     if request.method == 'POST' and form.validate_on_submit():
-
-        client_name, client_phone = form.name.data, form.phone.data
-        class_day, time = form.class_day.data, form.time.data
+        #saving booking-request in a json file
+        client_name = form.name.data
+        client_phone = form.phone.data
+        class_day = form.class_day.data
+        time = form.time.data
         tutor_id = form.tutor_id.data
+        req = {
+            'client_name' : client_name,
+            'client_phone' : client_phone,
+            'class_day' : class_day,
+            'time' : time,
+            'tutor_id' : tutor_id
+          }
+        save_request(req, file_name='booking.json')
+
+        #getting data from DB for HTML template
         all_days_of_week = get_data_from_db(option='days_of_week')
         all_tutors = get_data_from_db(option='tutors')
         tutor_info = [tutor for tutor in all_tutors if tutor.get('id', 'No match data') == int(tutor_id)][0]
+
         return render_template(
             'booking_done.html', 
             all_days_of_week=all_days_of_week,
@@ -189,6 +213,7 @@ def render_booking_done():
 @app.errorhandler(500)
 def render_server_error(error, msg='Что-то не так, но мы все починим!'):
     '''Handling 500 error.'''
+
     return render_template('error.html', msg=msg), 500
 
 
@@ -212,5 +237,5 @@ def render_bad_request(
 
 #entry point
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True) 
     #app.run()
