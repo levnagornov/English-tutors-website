@@ -31,6 +31,13 @@ class RequestForm(FlaskForm):
 
 
 class SortTutorsForm(FlaskForm):
+    """Form for sorting list of tutors.
+    Sorting options:
+    1. random order
+    2. tutors with high rating first
+    3. tutors with high price first
+    4. tutors with low price first 
+    """
     sort_by = SelectField(
         'Сортировка преподавателей',
         choices=[
