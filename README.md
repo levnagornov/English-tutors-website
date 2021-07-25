@@ -1,5 +1,7 @@
 # English-tutors-flask-app
+# Stepik project
 
+Training project for [a course on the Stepik](<https://stepik.org/course/61900/>).
 It's my second app on the Flask learning course. I make site of english language tutors.
 
 Using dependencies: Flask + WTForms, Bootstrap 4. As a database I will use JSON file.
