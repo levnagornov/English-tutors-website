@@ -3,6 +3,8 @@ venv/
 venv
 .venv
 venv/**
+venv/Lib/site-packages/pip
+venv/Lib/site-packages/
 __pycache__/
 booking.json
 request.json
