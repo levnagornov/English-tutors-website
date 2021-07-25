@@ -9,7 +9,8 @@ from func import get_data_from_db, save_request, is_tutor_free
 
 app = Flask(__name__)
 csrf = CSRFProtect(app)
-SECRET_KEY = os.urandom(43)
+#SECRET_KEY = os.urandom(43)
+SECRET_KEY = '1a0b329df51147d0a111335d2acbfsZ8' #for Herokku usage only
 app.config["SECRET_KEY"] = SECRET_KEY
 
 
