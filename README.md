@@ -3,7 +3,8 @@
 Training project for [a course on the Stepik](<https://stepik.org/course/61900/>).
 It's my second app on the Flask learning course. I make site of english language tutors.
 
-Using main dependencies: Flask + WTForms, Bootstrap 4. The rest dependencies are in requirements.txt
+Using main dependencies: Flask + WTForms, Bootstrap 4. The rest dependencies are in requirements.txt.
+
 As a database I will use JSON file.
 
 The site has:
