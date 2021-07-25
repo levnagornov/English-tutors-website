@@ -2,6 +2,7 @@
 venv/
 venv
 .venv
+venv/**
 __pycache__/
 booking.json
 request.json
