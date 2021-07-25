@@ -14,3 +14,5 @@ The site has:
 
 < 🔻 *in progress* 🔻 >
 * '/admin/' - admin's page with logging in for creating/editing/deleting tutors, goals and etc.;
+
+To run this app, I should create date base. So run create_json_db.py once.
