@@ -9,7 +9,7 @@ As a database I will use JSON file.
 
 The site has:
 * '/' - main page;
-* '/all/' - page of all tutors;
+* '/all/' - page of all tutors with a sort option;
 * '/profiles/<tutor_id>/' - page of a certain tutor;
 * '/goals/\<goal>/' - page with relevant tutors by certain goal;
 * '/booking/<tutor_id>/<class_day>/\<time>/' - booking page and booking done page;
