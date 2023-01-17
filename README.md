@@ -1,4 +1,4 @@
-# English-tutors-flask-app #Stepik_project
+# English tutors website
 
 Training project for [a course on the Stepik](<https://stepik.org/course/61900/>).
 It's my second app on the Flask learning course. I make site of english language tutors.
